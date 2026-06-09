@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Students{% endblock %}
+
+{% block content %}
+<div class="panel-card card">
+    <div class="card-body p-4 p-md-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="h3 mb-1">Students</h2>
+                <p class="text-muted mb-0">Manage student records and portal access.</p>
+            </div>
+            <a href="{% url 'add_student' %}" class="btn btn-primary">Add Student</a>
+        </div>
+
+        {% regroup students by current_class as class_list %}
+
+        {% for class in class_list %}
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">{{ class.grouper|default:"Unassigned Class" }}</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Admission No</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in class.list %}
+                            <tr>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.admission_number }}</td>
+                                <td>
+                                    <a href="{% url 'student_id_card' student.id %}" class="btn btn-info btn-sm">ID Card</a>
+                                    <a href="{% url 'edit_student' student.id %}" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'reset_student_password' student.id %}" class="btn btn-secondary btn-sm">Reset Password</a>
+                                    <a href="{% url 'delete_student' student.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">No students found.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

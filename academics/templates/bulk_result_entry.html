@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Bulk Result Entry{% endblock %}
+
+{% block content %}
+<div class="panel-card card">
+    <div class="card-body p-4 p-md-5">
+        <h2 class="h4 mb-4">Bulk Result Entry</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="row g-3 align-items-end mb-4">
+                <div class="col-12 col-md-5">
+                    <label for="subject" class="form-label">Select Subject</label>
+                    <select id="subject" name="subject" class="form-select" required>
+                        <option value="" selected disabled>Select subject</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-7">
+                    <label for="student-jump" class="form-label">Student Quick Jump</label>
+                    <input id="student-jump" class="form-control" list="student-list" placeholder="Type student name, then press Tab or Enter">
+                    <datalist id="student-list">
+                        {% for student in students %}
+                        <option value="{{ student.first_name }} {{ student.last_name }}"></option>
+                        {% endfor %}
+                    </datalist>
+                    <small class="text-muted">Moves focus to that student's CA1 field.</small>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle bg-white">
+                    <thead class="table-primary">
+                        <tr>
+                            <th style="min-width: 220px;">Student</th>
+                            <th style="min-width: 120px;">CA1</th>
+                            <th style="min-width: 120px;">CA2</th>
+                            <th style="min-width: 120px;">Exam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr id="student-row-{{ student.id }}" data-student-name="{{ student.first_name }} {{ student.last_name|lower }}">
+                            <td>
+                                <strong>{{ student.first_name }} {{ student.last_name }}</strong>
+                            </td>
+                            <td><input type="number" name="ca1_{{ student.id }}" class="form-control" min="0" max="20" id="ca1_{{ student.id }}"></td>
+                            <td><input type="number" name="ca2_{{ student.id }}" class="form-control" min="0" max="20"></td>
+                            <td><input type="number" name="exam_{{ student.id }}" class="form-control" min="0" max="60"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Save All Results</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var jumpInput = document.getElementById('student-jump');
+        if (!jumpInput) return;
+
+        var rows = document.querySelectorAll('tr[id^="student-row-"]');
+        var map = {};
+
+        rows.forEach(function (row) {
+            var name = (row.getAttribute('data-student-name') || '').trim().toLowerCase();
+            if (!name) return;
+            var ca1Input = row.querySelector('input[id^="ca1_"]');
+            if (ca1Input) {
+                map[name] = { row: row, input: ca1Input };
+            }
+        });
+
+        function focusStudentEntry() {
+            var key = (jumpInput.value || '').trim().toLowerCase();
+            var target = map[key];
+            if (!target) return false;
+
+            target.row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.input.focus();
+            target.input.select();
+            return true;
+        }
+
+        jumpInput.addEventListener('keydown', function (event) {
+            if (event.key !== 'Tab' && event.key !== 'Enter') return;
+            if (focusStudentEntry()) {
+                event.preventDefault();
+            }
+        });
+    })();
+</script>
+{% endblock %}

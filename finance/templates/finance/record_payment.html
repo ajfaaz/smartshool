@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Record Payment{% endblock %}
+
+{% block content %}
+<div class="panel-card card">
+    <div class="card-body p-4 p-md-5">
+        <h2 class="h4 mb-4">Record School Fee Payment</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="student" class="form-label">Student</label>
+                <select id="student" name="student" class="form-select" required>
+                    <option value="" disabled selected>Select student</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-6 mb-3">
+                    <label for="amount" class="form-label">Amount Paid</label>
+                    <input id="amount" type="number" name="amount" class="form-control" min="0" required>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <label for="term" class="form-label">Term</label>
+                    <select id="term" name="term" class="form-select" required>
+                        <option value="" disabled selected>Select term</option>
+                        <option value="First Term">First Term</option>
+                        <option value="Second Term">Second Term</option>
+                        <option value="Third Term">Third Term</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <label for="reference" class="form-label">Payment Reference</label>
+                    <input id="reference" type="text" name="reference" class="form-control" required>
+                    <small class="text-muted">Status is calculated automatically (Paid, Part Payment, or Overpaid).</small>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Save Payment</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

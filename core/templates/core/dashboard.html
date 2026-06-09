@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+
+{% block title %}School Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .analytics-hero {
+        background:
+            radial-gradient(circle at top right, rgba(13, 110, 253, 0.24), transparent 30%),
+            linear-gradient(135deg, #0f172a 0%, #173b6d 55%, #f59e0b 160%);
+        color: #fff;
+        border-radius: 1.5rem;
+        overflow: hidden;
+    }
+
+    .metric-card {
+        border: 0;
+        border-radius: 1.2rem;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+        height: 100%;
+    }
+
+    .metric-kicker {
+        color: #64748b;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .metric-value {
+        font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .chart-card {
+        border: 0;
+        border-radius: 1.35rem;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    .quick-link {
+        border-radius: 999px;
+    }
+
+    .dashboard-charts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .chart-wrap {
+        position: relative;
+        height: 260px;
+    }
+
+    .chart-wrap.chart-wrap-sm {
+        height: 220px;
+    }
+</style>
+
+<div class="analytics-hero p-4 p-lg-5 mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+            <span class="badge bg-light text-dark mb-3">Analytics Overview</span>
+            <h1 class="h2 mb-2">{{ school.name }}</h1>
+            <p class="mb-0 text-white-50">A live snapshot of enrolment, attendance, fee inflow, and academic performance.</p>
+        </div>
+        {% if user.is_superuser %}
+        <form method="post" action="{% url 'switch_school' %}" class="d-flex gap-2 align-items-center flex-wrap">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <select name="school" class="form-select">
+                {% for available_school in available_schools %}
+                <option value="{{ available_school.id }}" {% if active_school and active_school.id == available_school.id %}selected{% endif %}>
+                    {{ available_school.name }}
+                </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-light">Switch School</button>
+        </form>
+        {% elif user.is_authenticated and user.school %}
+        <div class="small text-white-50">Signed in as school admin for <strong class="text-white">{{ user.school.name }}</strong></div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card chart-card mb-4">
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h2 class="h5 mb-1">Analytics Period</h2>
+                <p class="text-muted mb-0">Current filter: <strong>{{ selected_period_label }}</strong></p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                {% for option in period_options %}
+                <a href="?period={{ option.key }}" class="btn {% if selected_period == option.key %}btn-dark{% else %}btn-outline-dark{% endif %} quick-link">{{ option.label }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card metric-card">
+            <div class="card-body p-4">
+                <div class="metric-kicker mb-2">Total Students</div>
+                <div class="metric-value">{{ students }}</div>
+                <div class="text-muted">Active learners enrolled in this school.</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card metric-card">
+            <div class="card-body p-4">
+                <div class="metric-kicker mb-2">Total Teachers</div>
+                <div class="metric-value">{{ teachers }}</div>
+                <div class="text-muted">Teaching staff assigned to current school operations.</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card metric-card">
+            <div class="card-body p-4">
+                <div class="metric-kicker mb-2">Total Classes</div>
+                <div class="metric-value">{{ classes }}</div>
+                <div class="text-muted">Configured class groups available this term.</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card metric-card">
+            <div class="card-body p-4">
+                <div class="metric-kicker mb-2">Attendance Rate</div>
+                <div class="metric-value">{{ attendance_rate }}%</div>
+                <div class="text-muted">{{ filtered_attendance_records }} attendance records inside {{ selected_period_label|lower }}.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card chart-card h-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-4">
+                    <div>
+                        <h2 class="h5 mb-1">Attendance Trend</h2>
+                        <p class="text-muted mb-0">Daily attendance rate for the latest days inside {{ selected_period_label|lower }}.</p>
+                    </div>
+                    <span class="badge text-bg-primary">Current rate {{ attendance_rate }}%</span>
+                </div>
+                <div class="chart-wrap chart-wrap-sm">
+                    <canvas id="attendanceTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+            <div class="card chart-card h-100">
+            <div class="card-body p-4">
+                <div class="metric-kicker mb-2">Fee Collection</div>
+                <div class="metric-value">NGN {{ fee_collection }}</div>
+                <div class="text-muted mb-4">{{ filtered_payment_records }} payment records inside {{ selected_period_label|lower }}.</div>
+                <div class="metric-kicker mb-2">Average Result Score</div>
+                <div class="metric-value">{{ average_result }}</div>
+                <div class="text-muted">Average total score across all published results.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-charts">
+    <div class="card chart-card h-100">
+        <div class="card-body p-4">
+            <h3 class="h5 mb-3">Student Attendance</h3>
+            <div class="chart-wrap chart-wrap-sm">
+                <canvas id="attendanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card chart-card h-100">
+        <div class="card-body p-4">
+            <h3 class="h5 mb-3">Exam Performance</h3>
+            <div class="chart-wrap chart-wrap-sm">
+                <canvas id="resultChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card chart-card h-100">
+        <div class="card-body p-4">
+            <h3 class="h5 mb-3">School Enrollment</h3>
+            <div class="chart-wrap chart-wrap-sm">
+                <canvas id="studentChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="card chart-card h-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-4">
+                    <div>
+                        <h2 class="h5 mb-1">Fee Collection Trend</h2>
+                        <p class="text-muted mb-0">Monthly payment totals filtered by {{ selected_period_label|lower }}.</p>
+                    </div>
+                    <span class="badge text-bg-success">Collected NGN {{ fee_collection }}</span>
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="feeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card chart-card h-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-4">
+                    <div>
+                        <h2 class="h5 mb-1">Result Performance Chart</h2>
+                        <p class="text-muted mb-0">Grade distribution based on all recorded result totals.</p>
+                    </div>
+                    <span class="badge text-bg-warning">Subjects {{ subjects }}</span>
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="resultBreakdownChart"></canvas>
+                </div>
+                {% if results_are_all_time %}
+                <div class="alert alert-light border mt-3 mb-0 small">Result records do not yet store a result date, so this chart currently stays all-time while attendance and fees follow the selected period.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card chart-card">
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+            <div>
+                <h2 class="h5 mb-1">Quick Actions</h2>
+                <p class="text-muted mb-0">Jump directly into the modules behind these numbers.</p>
+            </div>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{% url 'student_list' %}" class="btn btn-primary quick-link">Manage Students</a>
+            <a href="{% url 'teacher_list' %}" class="btn btn-info text-white quick-link">Manage Teachers</a>
+            <a href="{% url 'class_list' %}" class="btn btn-success quick-link">Manage Classes</a>
+            <a href="{% url 'subject_list' %}" class="btn btn-warning text-white quick-link">Manage Subjects</a>
+            <a href="{% url 'result_list' %}" class="btn btn-dark quick-link">Manage Results</a>
+            <a href="{% url 'record_payment' %}" class="btn btn-secondary quick-link">Record Payments</a>
+        </div>
+    </div>
+</div>
+
+{{ attendance_chart_labels|json_script:"attendance-chart-labels" }}
+{{ attendance_chart_series|json_script:"attendance-chart-series" }}
+{{ fee_chart_labels|json_script:"fee-chart-labels" }}
+{{ fee_chart_series|json_script:"fee-chart-series" }}
+{{ result_chart_labels|json_script:"result-chart-labels" }}
+{{ result_chart_series|json_script:"result-chart-series" }}
+{{ enrollment_chart_labels|json_script:"enrollment-chart-labels" }}
+{{ enrollment_chart_series|json_script:"enrollment-chart-series" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    const attendanceLabels = JSON.parse(document.getElementById("attendance-chart-labels").textContent);
+    const attendanceSeries = JSON.parse(document.getElementById("attendance-chart-series").textContent);
+    const feeLabels = JSON.parse(document.getElementById("fee-chart-labels").textContent);
+    const feeSeries = JSON.parse(document.getElementById("fee-chart-series").textContent);
+    const resultLabels = JSON.parse(document.getElementById("result-chart-labels").textContent);
+    const resultSeries = JSON.parse(document.getElementById("result-chart-series").textContent);
+    const enrollmentLabels = JSON.parse(document.getElementById("enrollment-chart-labels").textContent);
+    const enrollmentSeries = JSON.parse(document.getElementById("enrollment-chart-series").textContent);
+
+    new Chart(document.getElementById("attendanceTrendChart"), {
+        type: "line",
+        data: {
+            labels: attendanceLabels,
+            datasets: [{
+                label: "Attendance Rate",
+                data: attendanceSeries,
+                tension: 0.35,
+                fill: true,
+                borderColor: "#0d6efd",
+                backgroundColor: "rgba(13, 110, 253, 0.12)",
+                pointBackgroundColor: "#0d6efd",
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: (value) => value + "%"
+                    }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("attendanceChart"), {
+        type: "line",
+        data: {
+            labels: attendanceLabels,
+            datasets: [{
+                label: "Attendance %",
+                data: attendanceSeries,
+                borderColor: "#2563eb",
+                backgroundColor: "rgba(37,99,235,0.2)",
+                fill: true,
+                tension: 0.35
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    new Chart(document.getElementById("feeChart"), {
+        type: "bar",
+        data: {
+            labels: feeLabels,
+            datasets: [{
+                label: "Fee Collection",
+                data: feeSeries,
+                backgroundColor: ["#198754", "#25a764", "#38b273", "#55bf87", "#7ccd9f", "#a7dcc0"],
+                borderRadius: 12
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("resultChart"), {
+        type: "bar",
+        data: {
+            labels: resultLabels,
+            datasets: [{
+                label: "Average Score",
+                data: resultSeries,
+                backgroundColor: "#1d4ed8"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("studentChart"), {
+        type: "doughnut",
+        data: {
+            labels: enrollmentLabels,
+            datasets: [{
+                data: enrollmentSeries,
+                backgroundColor: ["#3b82f6", "#2563eb", "#1e40af", "#60a5fa", "#1d4ed8", "#93c5fd"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: "bottom"
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("resultBreakdownChart"), {
+        type: "doughnut",
+        data: {
+            labels: resultLabels,
+            datasets: [{
+                data: resultSeries,
+                backgroundColor: ["#16a34a", "#22c55e", "#facc15", "#fb923c", "#f97316", "#dc2626"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: "bottom"
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

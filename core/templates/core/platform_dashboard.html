@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Platform Dashboard{% endblock %}
+
+{% block content %}
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+            <div>
+                <h1 class="h3 mb-1">Platform Admin Dashboard</h1>
+                <p class="text-muted mb-0">Manage schools, school admins, and subscriptions.</p>
+            </div>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Open School Dashboard</a>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="text-muted small">Schools</div>
+                        <div class="display-6">{{ total_schools }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="text-muted small">School Admins</div>
+                        <div class="display-6">{{ total_school_admins }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="text-muted small">Active Subscriptions</div>
+                        <div class="display-6">{{ active_subscriptions }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Register School</h2>
+                        <form method="post" action="{% url 'create_school' %}">
+                            {% csrf_token %}
+                            <div class="mb-3"><input type="text" name="name" class="form-control" placeholder="School name" required></div>
+                            <div class="mb-3"><textarea name="address" class="form-control" placeholder="Address" required></textarea></div>
+                            <div class="mb-3"><input type="text" name="phone" class="form-control" placeholder="Phone" required></div>
+                            <div class="mb-3"><input type="email" name="email" class="form-control" placeholder="Email" required></div>
+                            <button type="submit" class="btn btn-primary w-100">Create School</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Create School Admin</h2>
+                        <form method="post" action="{% url 'create_school_admin' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <select name="school" class="form-select" required>
+                                    <option value="" selected disabled>Select school</option>
+                                    {% for school in schools %}
+                                    <option value="{{ school.id }}">{{ school.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3"><input type="text" name="first_name" class="form-control" placeholder="First name"></div>
+                            <div class="mb-3"><input type="text" name="last_name" class="form-control" placeholder="Last name"></div>
+                            <div class="mb-3"><input type="email" name="email" class="form-control" placeholder="Email"></div>
+                            <div class="mb-3"><input type="text" name="username" class="form-control" placeholder="Username" required></div>
+                            <div class="mb-3"><input type="password" name="password" class="form-control" placeholder="Password" required></div>
+                            <button type="submit" class="btn btn-success w-100">Create School Admin</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Manage Subscription</h2>
+                        <form method="post" action="{% url 'create_subscription' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <select name="school" class="form-select" required>
+                                    <option value="" selected disabled>Select school</option>
+                                    {% for school in schools %}
+                                    <option value="{{ school.id }}">{{ school.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3"><input type="text" name="plan" class="form-control" placeholder="Plan name" required></div>
+                            <div class="mb-3"><input type="date" name="expiry_date" class="form-control" required></div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="active" id="active" checked>
+                                <label class="form-check-label" for="active">Subscription active</label>
+                            </div>
+                            <button type="submit" class="btn btn-warning w-100">Save Subscription</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Schools</h2>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+                                </thead>
+                                <tbody>
+                                    {% for school in schools %}
+                                    <tr>
+                                        <td>{{ school.name }}</td>
+                                        <td>{{ school.email }}</td>
+                                        <td>{{ school.phone }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="3" class="text-muted">No schools yet.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">School Admins</h2>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr><th>Username</th><th>School</th><th>Email</th></tr>
+                                </thead>
+                                <tbody>
+                                    {% for admin in school_admins %}
+                                    <tr>
+                                        <td>{{ admin.user.username }}</td>
+                                        <td>{{ admin.school.name }}</td>
+                                        <td>{{ admin.user.email }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="3" class="text-muted">No school admins yet.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

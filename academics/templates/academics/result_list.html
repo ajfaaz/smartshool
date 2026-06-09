@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Results{% endblock %}
+
+{% block content %}
+<div class="panel-card card">
+    <div class="card-body p-4 p-md-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Academic Results</h2>
+            {% if can_add_result %}
+            <a href="{% url 'add_result' %}" class="btn btn-success">Add Result</a>
+            {% endif %}
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th class="text-center">CA1</th>
+                        <th class="text-center">CA2</th>
+                        <th class="text-center">Exam</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center">Grade</th>
+                        <th>Principal Comment</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in results %}
+                    <tr>
+                        <td>{{ r.student.first_name }} {{ r.student.last_name }}</td>
+                        <td>{{ r.student.student_class }}</td>
+                        <td>{{ r.subject.name }}</td>
+                        <td class="text-center">{{ r.ca1 }}</td>
+                        <td class="text-center">{{ r.ca2 }}</td>
+                        <td class="text-center">{{ r.exam }}</td>
+                        <td class="text-center"><strong>{{ r.total }}</strong></td>
+                        <td class="text-center">
+                            <span class="badge {% if r.grade == 'A' %}bg-success{% elif r.grade == 'F' %}bg-danger{% else %}bg-primary{% endif %}">
+                                {{ r.grade }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if can_comment_result %}
+                            <form method="post" action="{% url 'update_principal_comment' r.id %}" class="d-flex gap-2">
+                                {% csrf_token %}
+                                <input type="text" name="principal_comment" class="form-control form-control-sm" value="{{ r.principal_comment|default:'' }}" placeholder="Add principal comment">
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                            </form>
+                            {% else %}
+                            <span class="text-muted">{{ r.principal_comment|default:"-" }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'report_pdf' r.student.id %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center">No results recorded yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

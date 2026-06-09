@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .teacher-hero {
+        background: linear-gradient(110deg, #0f172a 0%, #1e40af 60%, #60a5fa 120%);
+        border-radius: 1.2rem;
+        color: #fff;
+    }
+
+    .dashboard-charts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .chart-card {
+        border: 0;
+        border-radius: 1rem;
+        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+    }
+
+    .chart-wrap {
+        position: relative;
+        height: 240px;
+    }
+</style>
+
+<div class="teacher-hero p-4 p-md-5 mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+            <h2 class="h3 mb-1">Teacher Dashboard</h2>
+            <p class="mb-0 text-white-50">{{ teacher.name }} · {{ teacher.subject }}</p>
+        </div>
+        <a class="btn btn-light" href="{% url 'create_assignment' %}">Create Assignment</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4" id="my-classes">
+    {% for assignment in assigned_classes %}
+    <div class="col-md-4">
+        <div class="card h-100 border-0 bg-light">
+            <div class="card-body">
+                <div class="small text-muted">{{ assignment.subject.name }}</div>
+                <div class="fw-semibold">{{ assignment.student_class.name }}</div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-warning mb-0">No classes assigned yet.</div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <a href="{% url 'create_assignment' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-warning-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-warning-emphasis">Assignments</h5>
+                    <p class="card-text text-dark mb-0">Create and manage class tasks.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'mark_attendance' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-primary-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Mark Attendance</h5>
+                    <p class="card-text text-dark mb-0">Take attendance for assigned classes.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'view_attendance_history' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-info-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-info">View History</h5>
+                    <p class="card-text text-dark mb-0">Review past attendance records.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'enter_results' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-success-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Results</h5>
+                    <p class="card-text text-dark mb-0">Upload and review assessment scores.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="dashboard-charts mb-4">
+    <div class="card chart-card">
+        <div class="card-body">
+            <h3 class="h5">Student Attendance</h3>
+            <div class="chart-wrap">
+                <canvas id="attendanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card chart-card">
+        <div class="card-body">
+            <h3 class="h5">Exam Performance</h3>
+            <div class="chart-wrap">
+                <canvas id="resultChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card chart-card">
+        <div class="card-body">
+            <h3 class="h5">School Enrollment</h3>
+            <div class="chart-wrap">
+                <canvas id="studentChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card chart-card">
+        <div class="card-body">
+            <h3 class="h5">Fee Payments</h3>
+            <div class="chart-wrap">
+                <canvas id="feeChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card card mb-4" id="assignments">
+    <div class="card-body p-4">
+        <h3 class="h5 mb-3">Recent Assignments</h3>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Subject</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assignment in assignments %}
+                    <tr>
+                        <td>{{ assignment.title }}</td>
+                        <td>{{ assignment.subject.name }}</td>
+                        <td>{{ assignment.due_date }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-muted">No assignments created yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card card" id="profile">
+    <div class="card-body p-4">
+        <h3 class="h5 mb-2">Profile</h3>
+        <p class="text-muted mb-0">Subject specialization: <strong>{{ teacher.subject }}</strong></p>
+    </div>
+</div>
+
+{{ attendance_chart_labels|json_script:"teacher-attendance-chart-labels" }}
+{{ attendance_chart_series|json_script:"teacher-attendance-chart-series" }}
+{{ result_chart_labels|json_script:"teacher-result-chart-labels" }}
+{{ result_chart_series|json_script:"teacher-result-chart-series" }}
+{{ enrollment_chart_labels|json_script:"teacher-enrollment-chart-labels" }}
+{{ enrollment_chart_series|json_script:"teacher-enrollment-chart-series" }}
+{{ fee_chart_labels|json_script:"teacher-fee-chart-labels" }}
+{{ fee_chart_series|json_script:"teacher-fee-chart-series" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    const attendanceLabels = JSON.parse(document.getElementById("teacher-attendance-chart-labels").textContent);
+    const attendanceSeries = JSON.parse(document.getElementById("teacher-attendance-chart-series").textContent);
+    const resultLabels = JSON.parse(document.getElementById("teacher-result-chart-labels").textContent);
+    const resultSeries = JSON.parse(document.getElementById("teacher-result-chart-series").textContent);
+    const enrollmentLabels = JSON.parse(document.getElementById("teacher-enrollment-chart-labels").textContent);
+    const enrollmentSeries = JSON.parse(document.getElementById("teacher-enrollment-chart-series").textContent);
+    const feeLabels = JSON.parse(document.getElementById("teacher-fee-chart-labels").textContent);
+    const feeSeries = JSON.parse(document.getElementById("teacher-fee-chart-series").textContent);
+
+    new Chart(document.getElementById("attendanceChart"), {
+        type: "line",
+        data: {
+            labels: attendanceLabels,
+            datasets: [{
+                label: "Attendance %",
+                data: attendanceSeries,
+                borderColor: "#2563eb",
+                backgroundColor: "rgba(37,99,235,0.2)",
+                fill: true,
+                tension: 0.35
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    new Chart(document.getElementById("resultChart"), {
+        type: "bar",
+        data: {
+            labels: resultLabels,
+            datasets: [{
+                label: "Average Score",
+                data: resultSeries,
+                backgroundColor: "#1d4ed8"
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    new Chart(document.getElementById("studentChart"), {
+        type: "doughnut",
+        data: {
+            labels: enrollmentLabels,
+            datasets: [{
+                data: enrollmentSeries,
+                backgroundColor: ["#3b82f6", "#2563eb", "#1e40af", "#60a5fa", "#1d4ed8"]
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    new Chart(document.getElementById("feeChart"), {
+        type: "bar",
+        data: {
+            labels: feeLabels,
+            datasets: [{
+                label: "Fee Payments",
+                data: feeSeries,
+                backgroundColor: "#0ea5e9"
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+</script>
+{% endblock %}

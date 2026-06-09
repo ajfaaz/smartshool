@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Enter Results{% endblock %}
+
+{% block content %}
+<div class="panel-card card">
+    <div class="card-body p-4 p-md-5">
+        <h2 class="h4 mb-4">Enter Student Result</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="student" class="form-label">Student</label>
+                <select id="student" name="student" class="form-select" required>
+                    <option value="" selected disabled>Select student</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="subject" class="form-label">Subject</label>
+                <select id="subject" name="subject" class="form-select" required>
+                    <option value="" selected disabled>Select subject</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="ca1" class="form-label">CA1</label>
+                    <input id="ca1" type="number" name="ca1" class="form-control" min="0" max="20" required>
+                </div>
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="ca2" class="form-label">CA2</label>
+                    <input id="ca2" type="number" name="ca2" class="form-control" min="0" max="20" required>
+                </div>
+                <div class="col-12 col-md-4 mb-4">
+                    <label for="exam" class="form-label">Exam</label>
+                    <input id="exam" type="number" name="exam" class="form-control" min="0" max="60" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Save Result</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

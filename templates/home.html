@@ -1,0 +1,291 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SmartSchool | Modern School ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --blue-900: #0f172a;
+            --blue-700: #1e40af;
+            --blue-600: #2563eb;
+            --blue-400: #60a5fa;
+            --bg-soft: #f8fafc;
+            --text-main: #172554;
+        }
+
+        body {
+            background: var(--bg-soft);
+            color: var(--text-main);
+        }
+
+        .navbar-shell {
+            background: #fff;
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        .brand-logo {
+            height: 48px;
+            width: auto;
+            max-width: 280px;
+            object-fit: contain;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        .brand-fallback {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+        }
+
+        .hero {
+            background: linear-gradient(90deg, var(--blue-900), var(--blue-700));
+            color: #fff;
+            border-radius: 1.5rem;
+            padding: 3.5rem 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .hero h1 {
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero-preview {
+            border-radius: 1rem;
+            background: #fff;
+            color: #0f172a;
+            padding: 1rem;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+        }
+
+        .stat-chip {
+            background: #dbeafe;
+            color: #1e3a8a;
+            border-radius: 999px;
+            font-weight: 600;
+            padding: 0.45rem 0.9rem;
+            display: inline-block;
+            margin: 0.2rem;
+        }
+
+        .feature-card,
+        .review-card,
+        .cta-card {
+            border: 0;
+            border-radius: 1rem;
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .trusted {
+            background: #eff6ff;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+
+        .footer-shell {
+            background: var(--blue-900);
+            color: #bfdbfe;
+        }
+
+        @media (max-width: 991px) {
+            .hero {
+                padding: 2rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar navbar-expand-lg navbar-shell sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                {% if active_school and active_school.logo %}
+                <img src="{{ active_school.logo.url }}" alt="{{ active_school.name }} logo" class="brand-logo">
+                {% else %}
+                <img src="{% static 'core/img/brand-logo.png' %}" alt="SmartSchool logo" class="brand-logo">
+                {% endif %}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="siteNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#solutions">Solutions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#demo">Demo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+                </ul>
+                <div class="d-flex gap-2">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+                    {% else %}
+                    <a href="{% url 'portals' %}" class="btn btn-outline-primary">Login</a>
+                    <a href="{% url 'platform_login' %}" class="btn btn-primary">Request Demo</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container py-4 py-lg-5">
+        <section class="hero" id="demo">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <h1>Transform Your Institution<br>with SmartSchool</h1>
+                    <p class="lead text-white-50 mt-3 mb-4">The all-in-one school management system for modern schools.</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'portals' %}" class="btn btn-primary btn-lg">Get Started Free</a>
+                        <a href="{% url 'platform_login' %}" class="btn btn-light btn-lg text-primary">Watch Demo</a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="hero-preview">
+                        <h5 class="mb-3">Dashboard Preview</h5>
+                        <span class="stat-chip">Attendance 96%</span>
+                        <span class="stat-chip">Fees NGN 2.4M</span>
+                        <span class="stat-chip">Results +12%</span>
+                        <span class="stat-chip">Enrollment 1,240</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5">
+            <div class="trusted text-center" id="solutions">
+                <h2 class="h4 mb-3">Trusted by forward-thinking schools</h2>
+                <p class="mb-0 text-secondary">Private schools, colleges, tutorial centres, and multi-campus institutions across Nigeria.</p>
+            </div>
+        </section>
+
+        <section class="pb-5" id="features">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card card h-100">
+                        <div class="card-body">
+                            <div class="feature-icon mb-3">01</div>
+                            <h3 class="h5">Attendance Intelligence</h3>
+                            <p class="text-secondary mb-0">Real-time class attendance, trend charts, and school-wide daily rates.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card card h-100">
+                        <div class="card-body">
+                            <div class="feature-icon mb-3">02</div>
+                            <h3 class="h5">Results and Report Cards</h3>
+                            <p class="text-secondary mb-0">Upload CA/exam scores, track performance, and publish term reports.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card card h-100">
+                        <div class="card-body">
+                            <div class="feature-icon mb-3">03</div>
+                            <h3 class="h5">Finance Control</h3>
+                            <p class="text-secondary mb-0">Fee setup, payment records, outstanding balances, and audit-ready history.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card card h-100">
+                        <div class="card-body">
+                            <div class="feature-icon mb-3">04</div>
+                            <h3 class="h5">Teacher Workspace</h3>
+                            <p class="text-secondary mb-0">Assignments, result entry, attendance, and classroom performance insights.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card card h-100">
+                        <div class="card-body">
+                            <div class="feature-icon mb-3">05</div>
+                            <h3 class="h5">Parent Notifications</h3>
+                            <p class="text-secondary mb-0">Automatic SMS alerts when student results are published.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" id="pricing">
+                    <div class="feature-card card h-100">
+                        <div class="card-body">
+                            <div class="feature-icon mb-3">06</div>
+                            <h3 class="h5">Platform Administration</h3>
+                            <p class="text-secondary mb-0">Manage schools, subscriptions, and roles from one control center.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pb-5" id="testimonials">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="review-card card h-100">
+                        <div class="card-body">
+                            <p class="mb-2">"Admissions and fee tracking became effortless within one term."</p>
+                            <small class="text-secondary">Bursar, Sunrise College</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="review-card card h-100">
+                        <div class="card-body">
+                            <p class="mb-2">"Teachers now upload scores in minutes and parents get instant updates."</p>
+                            <small class="text-secondary">Principal, Greenfield Academy</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="review-card card h-100">
+                        <div class="card-body">
+                            <p class="mb-2">"SmartSchool gave us visibility across campuses and terms."</p>
+                            <small class="text-secondary">Director, Crest Group of Schools</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pb-4">
+            <div class="cta-card card text-center p-4 p-md-5">
+                <h2 class="h3 mb-2">Ready to digitize your school operations?</h2>
+                <p class="text-secondary mb-4">Book a demo and get your institution onboarded quickly.</p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a href="{% url 'portals' %}" class="btn btn-primary btn-lg">Open Portals</a>
+                    <a href="{% url 'platform_login' %}" class="btn btn-outline-primary btn-lg">Talk to Sales</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-shell py-4">
+        <div class="container d-flex justify-content-between flex-wrap gap-2">
+            <span>SmartSchool School ERP</span>
+            <span>Attendance • Results • Finance • Portals</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

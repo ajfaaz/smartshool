@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Authentication & Security Guide{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-12">
+        <div class="panel-card card">
+            <div class="card-body p-4 p-md-5">
+                <h1 class="h2 mb-4">Authentication & Security</h1>
+                
+                <div class="row g-4">
+                    <!-- Account Settings -->
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body p-4">
+                                <h5 class="card-title">
+                                    <i class="bi bi-gear text-primary me-2"></i>Account Settings
+                                </h5>
+                                <p class="card-text text-muted mb-3">
+                                    Access your account information and manage your profile settings.
+                                </p>
+                                <a href="{% url 'account_settings' %}" class="btn btn-primary btn-sm">
+                                    Go to Account Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Change Password -->
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body p-4">
+                                <h5 class="card-title">
+                                    <i class="bi bi-lock text-success me-2"></i>Change Password
+                                </h5>
+                                <p class="card-text text-muted mb-3">
+                                    Update your password to keep your account secure.
+                                </p>
+                                <a href="{% url 'change_password' %}" class="btn btn-success btn-sm">
+                                    Change Password
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Forgot Password -->
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body p-4">
+                                <h5 class="card-title">
+                                    <i class="bi bi-question-circle text-warning me-2"></i>Forgot Password
+                                </h5>
+                                <p class="card-text text-muted mb-3">
+                                    Reset your password if you've forgotten it or been locked out.
+                                </p>
+                                <a href="{% url 'forgot_password' %}" class="btn btn-warning btn-sm">
+                                    Reset Password
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logout -->
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body p-4">
+                                <h5 class="card-title">
+                                    <i class="bi bi-box-arrow-right text-danger me-2"></i>Logout
+                                </h5>
+                                <p class="card-text text-muted mb-3">
+                                    End your session and return to the login portal.
+                                </p>
+                                <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-4 border-top">
+                    <h4 class="mb-3">Security Features</h4>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <h6 class="mb-2">✓ Password Requirements</h6>
+                            <ul class="small text-muted ps-3">
+                                <li>Minimum 8 characters</li>
+                                <li>Not entirely numeric</li>
+                                <li>Cannot contain username</li>
+                                <li>Different from previous passwords</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h6 class="mb-2">✓ Session Security</h6>
+                            <ul class="small text-muted ps-3">
+                                <li>24-hour session timeout</li>
+                                <li>Automatic logout on browser close</li>
+                                <li>Secure session cookies (HttpOnly)</li>
+                                <li>CSRF protection enabled</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h6 class="mb-2">✓ Password Reset</h6>
+                            <ul class="small text-muted ps-3">
+                                <li>Email-based verification</li>
+                                <li>Time-limited reset links (1 hour)</li>
+                                <li>Role-specific portals</li>
+                                <li>Multi-factor verification available</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h6 class="mb-2">✓ Account Management</h6>
+                            <ul class="small text-muted ps-3">
+                                <li>View account information</li>
+                                <li>Login history tracking</li>
+                                <li>Role-based access control</li>
+                                <li>Admin account management</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 alert alert-info" role="alert">
+                    <h6 class="alert-heading">Pro Tips for Security</h6>
+                    <ul class="mb-0 ps-3">
+                        <li>Use strong, unique passwords combining letters, numbers, and symbols</li>
+                        <li>Change your password regularly (at least every 90 days)</li>
+                        <li>Never share your login credentials with anyone</li>
+                        <li>Always logout when using shared computers</li>
+                        <li>Enable two-factor authentication if available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

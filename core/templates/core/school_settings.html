@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}School Settings{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-12">
+        <div class="panel-card card">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+                    <div>
+                        <h1 class="h3 mb-1">School Settings</h1>
+                        <p class="text-muted mb-0">Manage your school profile, sessions, terms, and fee structures.</p>
+                    </div>
+                    {% if school.logo %}
+                    <img src="{{ school.logo.url }}" alt="{{ school.name }}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 1rem;">
+                    {% endif %}
+                </div>
+
+                <div class="alert {% if email_backend_label == 'SMTP' %}alert-success{% else %}alert-warning{% endif %} d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+                    <div>
+                        <div class="fw-semibold mb-1">Password Reset Email Delivery</div>
+                        <div class="small">
+                            Backend: <strong>{{ email_backend_label }}</strong> |
+                            From: <strong>{{ email_from_address }}</strong> |
+                            Link expiry: <strong>{{ password_reset_timeout_minutes }} minutes</strong>
+                        </div>
+                        {% if email_backend_label == 'Console' %}
+                        <div class="small mt-1">Reset emails are currently printed in the server terminal. Add SMTP environment variables to send them to real inboxes.</div>
+                        {% else %}
+                        <div class="small mt-1">Reset emails are being sent through your configured SMTP server.</div>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'forgot_password' %}?role=school_admin" class="btn btn-sm btn-outline-dark">Open Recovery Page</a>
+                </div>
+
+                <form method="post" action="{% url 'update_school_profile' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">School Name</label>
+                            <input type="text" name="name" class="form-control" value="{{ school.name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="phone" class="form-control" value="{{ school.phone }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ school.email }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Logo</label>
+                            <input type="file" name="logo" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Address</label>
+                            <textarea name="address" class="form-control" rows="3" required>{{ school.address }}</textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-4">Save School Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel-card card h-100">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Sessions</h2>
+                <form method="post" action="{% url 'create_session' %}" class="d-flex gap-2 mb-3">
+                    {% csrf_token %}
+                    <input type="text" name="name" class="form-control" placeholder="e.g. 2025/2026" required>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+                <div class="list-group list-group-flush">
+                    {% for session in sessions %}
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span>{{ session.name }}</span>
+                        <a href="{% url 'delete_session' session.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                    {% empty %}
+                    <div class="text-muted">No sessions added yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel-card card h-100">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Terms</h2>
+                <form method="post" action="{% url 'create_term' %}" class="d-flex gap-2 mb-3">
+                    {% csrf_token %}
+                    <input type="text" name="name" class="form-control" placeholder="e.g. First Term" required>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+                <div class="list-group list-group-flush">
+                    {% for term in terms %}
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span>{{ term.name }}</span>
+                        <a href="{% url 'delete_term' term.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                    {% empty %}
+                    <div class="text-muted">No terms added yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel-card card h-100">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Principal Account</h2>
+                <form method="post" action="{% url 'create_principal' %}" class="row g-2 mb-3">
+                    {% csrf_token %}
+                    <div class="col-12"><input type="text" name="name" class="form-control" placeholder="Full name" required></div>
+                    <div class="col-12"><input type="text" name="phone" class="form-control" placeholder="Phone number" required></div>
+                    <div class="col-12"><input type="email" name="email" class="form-control" placeholder="Email address"></div>
+                    <div class="col-6"><input type="text" name="username" class="form-control" placeholder="Username" required></div>
+                    <div class="col-6"><input type="text" name="password" class="form-control" placeholder="Temporary password" required></div>
+                    <div class="col-12"><button type="submit" class="btn btn-primary">Create Principal</button></div>
+                </form>
+                <div class="list-group list-group-flush">
+                    {% for principal in principals %}
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span>{{ principal.name }} <small class="text-muted">({{ principal.user.username }})</small></span>
+                        <span class="badge text-bg-secondary">{{ principal.phone }}</span>
+                    </div>
+                    {% empty %}
+                    <div class="text-muted">No principal account created yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel-card card h-100">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Exam Officer Account</h2>
+                <form method="post" action="{% url 'create_exam_officer' %}" class="row g-2 mb-3">
+                    {% csrf_token %}
+                    <div class="col-12"><input type="text" name="name" class="form-control" placeholder="Full name" required></div>
+                    <div class="col-12"><input type="text" name="phone" class="form-control" placeholder="Phone number" required></div>
+                    <div class="col-12"><input type="email" name="email" class="form-control" placeholder="Email address"></div>
+                    <div class="col-6"><input type="text" name="username" class="form-control" placeholder="Username" required></div>
+                    <div class="col-6"><input type="text" name="password" class="form-control" placeholder="Temporary password" required></div>
+                    <div class="col-12"><button type="submit" class="btn btn-primary">Create Exam Officer</button></div>
+                </form>
+                <div class="list-group list-group-flush">
+                    {% for officer in exam_officers %}
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span>{{ officer.name }} <small class="text-muted">({{ officer.user.username }})</small></span>
+                        <span class="badge text-bg-primary">{{ officer.phone }}</span>
+                    </div>
+                    {% empty %}
+                    <div class="text-muted">No exam officer account created yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="panel-card card">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Fee Structures</h2>
+                <form method="post" action="{% url 'create_fee_structure' %}" class="row g-3 mb-4">
+                    {% csrf_token %}
+                    <div class="col-md-4">
+                        <label class="form-label">Class</label>
+                        <select name="class_name" class="form-select" required>
+                            <option value="" selected disabled>Select class</option>
+                            {% for class in classes %}
+                            <option value="{{ class.name }}">{{ class.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Term</label>
+                        <select name="term" class="form-select" required>
+                            <option value="" selected disabled>Select term</option>
+                            {% for term in terms %}
+                            <option value="{{ term.name }}">{{ term.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Amount</label>
+                        <input type="number" name="amount" class="form-control" min="0" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Save Fee Structure</button>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Class</th>
+                                <th>Term</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fee in fee_structures %}
+                            <tr>
+                                <td>{{ fee.class_name }}</td>
+                                <td>{{ fee.term }}</td>
+                                <td>NGN {{ fee.amount }}</td>
+                                <td><a href="{% url 'delete_fee_structure' fee.id %}" class="btn btn-sm btn-outline-danger">Delete</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center text-muted">No fee structures added yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

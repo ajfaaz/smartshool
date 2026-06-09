@@ -1,0 +1,98 @@
+<html>
+<head>
+<style>
+
+body {
+font-family: Arial;
+}
+
+.header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+border-bottom: 3px solid #333;
+padding-bottom: 15px;
+}
+
+.school-info h2 {
+margin: 0;
+}
+
+.school-logo img {
+max-height: 80px;
+max-width: 100px;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+table, th, td {
+border: 1px solid black;
+padding: 8px;
+text-align: center;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="school-info">
+        <h2>{{ results.first.student.school.name|default:"School Report Card" }}</h2>
+        <p style="margin: 5px 0;"><strong>Student Report Card</strong></p>
+    </div>
+    {% if results.first.student.school.logo %}
+    <div class="school-logo">
+        <img src="{{ results.first.student.school.logo.url }}" alt="School Logo">
+    </div>
+    {% endif %}
+</div>
+
+<p><strong>Name:</strong> {{ student.first_name }} {{ student.last_name }}</p>
+<p><strong>Class:</strong> {{ student.student_class }}</p>
+
+<table>
+
+<tr>
+<th>Subject</th>
+<th>CA1</th>
+<th>CA2</th>
+<th>Exam</th>
+<th>Total</th>
+<th>Grade</th>
+</tr>
+
+{% for r in results %}
+
+<tr>
+<td>{{ r.subject }}</td>
+<td>{{ r.ca1 }}</td>
+<td>{{ r.ca2 }}</td>
+<td>{{ r.exam }}</td>
+<td>{{ r.total }}</td>
+<td>{{ r.grade }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<h3>Result Summary</h3>
+<p><strong>Position:</strong> {{ position }}</p>
+
+<br>
+
+<h3>Teacher Comment</h3>
+<p>{{ results.first.teacher_comment }}</p>
+
+<h3>Principal Comment</h3>
+<p>{{ results.first.principal_comment }}</p>
+
+</body>
+</html>

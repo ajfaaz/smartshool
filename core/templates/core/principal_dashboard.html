@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Principal Dashboard{% endblock %}
+
+{% block content %}
+<div class="panel-card card mb-4">
+    <div class="card-body p-4 p-md-5">
+        <h1 class="h3 mb-1">Principal Dashboard</h1>
+        <p class="text-muted mb-0">{{ principal.name }} · {{ school.name }}</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <a href="{% url 'result_list' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-primary-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Review Results</h5>
+                    <p class="card-text text-dark mb-0">View school-wide results and principal comments.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a href="{% url 'dashboard' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-success-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-success">School Analytics</h5>
+                    <p class="card-text text-dark mb-0">Open school analytics and performance charts.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="panel-card card">
+    <div class="card-body p-4">
+        <h2 class="h5 mb-3">Recent Result Records</h2>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Total</th>
+                        <th>Principal Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in recent_results %}
+                    <tr>
+                        <td>{{ row.student.name }}</td>
+                        <td>{{ row.subject.name }}</td>
+                        <td>{{ row.total }}</td>
+                        <td>{{ row.principal_comment|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-muted">No result records yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

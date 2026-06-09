@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Assignments{% endblock %}
+
+{% block content %}
+<div class="panel-card card">
+    <div class="card-body p-4 p-md-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Teacher Subject Assignments</h2>
+            <a href="{% url 'assign_teacher' %}" class="btn btn-success">Assign Teacher</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>School</th>
+                        <th>Teacher</th>
+                        <th>Subject</th>
+                        <th>Class</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in assignments %}
+                    <tr>
+                        <td>{{ a.school.name }}</td>
+                        <td>{{ a.teacher.name }}</td>
+                        <td>{{ a.subject.name }}</td>
+                        <td>{{ a.student_class }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No assignments found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

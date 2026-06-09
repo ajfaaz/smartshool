@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Exam Officer Dashboard{% endblock %}
+
+{% block content %}
+<div class="panel-card card mb-4">
+    <div class="card-body p-4 p-md-5">
+        <h1 class="h3 mb-1">Exam Officer Dashboard</h1>
+        <p class="text-muted mb-0">{{ exam_officer.name }} · {{ school.name }}</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <a href="{% url 'enter_results' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-primary-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Enter Results</h5>
+                    <p class="card-text text-dark mb-0">Capture single student CA/exam scores.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'bulk_result_entry' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-success-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Bulk Entry</h5>
+                    <p class="card-text text-dark mb-0">Upload class-wide result data quickly.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'result_list' %}" class="text-decoration-none">
+            <div class="card h-100 border-0 bg-warning-subtle">
+                <div class="card-body">
+                    <h5 class="card-title text-warning-emphasis">Result Register</h5>
+                    <p class="card-text text-dark mb-0">Review scores and generated report PDFs.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="panel-card card">
+    <div class="card-body p-4">
+        <h2 class="h5 mb-3">Recent Result Records</h2>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Total</th>
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in recent_results %}
+                    <tr>
+                        <td>{{ row.student.name }}</td>
+                        <td>{{ row.subject.name }}</td>
+                        <td>{{ row.total }}</td>
+                        <td>#{{ row.id }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-muted">No result records yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

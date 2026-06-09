@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ student.name|default:student.first_name|add:" "|add:student.last_name }} ID Card</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef6ff 0%, #f8fbff 50%, #e8fff7 100%);
+        }
+
+        .id-card {
+            width: 100%;
+            max-width: 380px;
+            border: 0;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+
+        .id-card__header {
+            background: linear-gradient(135deg, #0d6efd, #198754);
+        }
+
+        .avatar-circle {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.18);
+            border: 3px solid rgba(255, 255, 255, 0.45);
+            color: #fff;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center py-5 px-3">
+    <div class="card id-card shadow-lg">
+        <div class="id-card__header text-white p-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="mb-1 text-uppercase small fw-semibold">Student Identity Card</p>
+                    <h3 class="mb-0 fw-bold">{{ student.school.name }}</h3>
+                </div>
+                {% if student.school.logo %}
+                    <img src="{{ student.school.logo.url }}" alt="School Logo" style="height: 50px; width: auto;">
+                {% else %}
+                    <span class="badge bg-light text-primary rounded-pill px-3 py-2">Active</span>
+                {% endif %}
+            </div>
+
+            <div class="d-flex align-items-center gap-3 mt-4">
+                {% if student.profile_picture %}
+                    <img src="{{ student.profile_picture.url }}" alt="Student Photo" class="avatar-circle" style="width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255, 255, 255, 0.45);">
+                {% else %}
+                    <div class="avatar-circle">
+                        {{ student.name|slice:":1"|upper }}
+                    </div>
+                {% endif %}
+                <div>
+                    <h4 class="mb-1 fw-bold">{{ student.name }}</h4>
+                    <p class="mb-0 opacity-75">{{ student.current_class|default:"Unassigned Class" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="border rounded-4 p-3 h-100 bg-light">
+                        <div class="label mb-1">Admission No</div>
+                        <div class="fw-semibold">{{ student.admission_number }}</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border rounded-4 p-3 h-100 bg-light">
+                        <div class="label mb-1">Date of Birth</div>
+                        <div class="fw-semibold">{{ student.date_of_birth|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border rounded-4 p-3 h-100 bg-light">
+                        <div class="label mb-1">School</div>
+                        <div class="fw-semibold">{{ student.school.name }}</div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="border rounded-4 p-3 bg-light">
+                        <div class="label mb-1">Parent Phone</div>
+                        <div class="fw-semibold">{{ student.parent_phone }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <a href="{% url 'student_list' %}" class="btn btn-outline-secondary w-100">Back to Students</a>
+                <button onclick="window.print()" class="btn btn-primary w-100">Print Card</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
