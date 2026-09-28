@@ -13,9 +13,10 @@ echo "--- Starting SmartSchool Deployment: $(date) ---"
 
 # 1. Update the repository folder
 if [ -d "$REPO_DIR/.git" ]; then
-    echo "Step 1: Pulling latest changes from GitHub..."
+    echo "Step 1: Fetching and resetting to latest main from GitHub..."
     cd "$REPO_DIR"
-    git pull origin main
+    git fetch origin main
+    git reset --hard origin/main
 else
     echo "Step 1: Repo path $REPO_DIR does not exist or is not a git repo. Proceeding..."
 fi
