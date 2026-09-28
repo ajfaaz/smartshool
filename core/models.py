@@ -74,3 +74,18 @@ def _get_user_school(user):
 
 
 User.add_to_class("school", property(_get_user_school))
+
+
+class DemoRequest(models.Model):
+    name = models.CharField(max_length=200)
+    school_name = models.CharField(max_length=200)
+    role = models.CharField(max_length=100, blank=True)
+    email = models.EmailField()
+    phone = models.CharField(max_length=30)
+    student_count = models.CharField(max_length=50, blank=True)
+    message = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.school_name} - {self.name} ({self.created_at.strftime('%Y-%m-%d')})"
+

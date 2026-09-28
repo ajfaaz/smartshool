@@ -21,7 +21,7 @@ from teachers.models import Teacher
 from academics.models import Class, Result, Session, Subject, Term
 from attendance.models import Attendance
 from finance.models import FeeStructure, Payment
-from .models import ExamOfficer, Principal, School, SchoolAdmin, Subscription
+from .models import DemoRequest, ExamOfficer, Principal, School, SchoolAdmin, Subscription
 from .school_scope import require_active_school, set_active_school
 
 
@@ -189,59 +189,64 @@ def _user_matches_role(user, role_key):
 
 
 def portals(request):
-    portal_items = [
-        {
-            "title": "Platform Admin",
-            "description": "Register schools, create school admins, and manage subscriptions.",
-            "url_name": "platform_login",
-            "button": "Open Platform Portal",
-            "tone": "dark",
-        },
-        {
-            "title": "School Admin",
-            "description": "Manage students, teachers, classes, academics, attendance, and finance for one school.",
-            "url_name": "school_admin_login",
-            "button": "Open School Admin Portal",
-            "tone": "primary",
-        },
-        {
-            "title": "Teacher",
-            "description": "Access assigned classes, enter results, manage attendance, and create assignments.",
-            "url_name": "teacher_login",
-            "button": "Open Teacher Portal",
-            "tone": "success",
-        },
-        {
-            "title": "Principal",
-            "description": "Review school-wide academic results and monitor school performance.",
-            "url_name": "principal_login",
-            "button": "Open Principal Portal",
-            "tone": "secondary",
-        },
-        {
-            "title": "Exam Officer",
-            "description": "Manage result entry workflows, quality checks, and publishing controls.",
-            "url_name": "exam_officer_login",
-            "button": "Open Exam Officer Portal",
-            "tone": "primary",
-        },
-        {
-            "title": "Student",
-            "description": "View personal dashboard, results, and school records.",
-            "url_name": "student_login",
-            "button": "Open Student Portal",
-            "tone": "warning",
-        },
-        {
-            "title": "Parent",
-            "description": "Track your child, view results, and follow school activity from one place.",
-            "url_name": "parent_login",
-            "button": "Open Parent Portal",
-            "tone": "info",
-        },
-    ]
+    return redirect("/#portals")
 
-    return render(request, "core/portals.html", {"portal_items": portal_items})
+
+def request_demo(request):
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        school_name = request.POST.get("school_name", "").strip()
+        role = request.POST.get("role", "").strip()
+        email = request.POST.get("email", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        student_count = request.POST.get("student_count", "").strip()
+        message = request.POST.get("message", "").strip()
+
+        if not name or not email or not phone or not school_name:
+            messages.error(request, "Please fill in all required fields (Name, School Name, Email, Phone).")
+            return redirect("/#contact")
+
+        DemoRequest.objects.create(
+            name=name,
+            school_name=school_name,
+            role=role,
+            email=email,
+            phone=phone,
+            student_count=student_count,
+            message=message
+        )
+
+        try:
+            subject = f"New SmartSchool Demo Request from {school_name}"
+            body = (
+                f"New Demo Request Details:\n\n"
+                f"Full Name: {name}\n"
+                f"School/Institution: {school_name}\n"
+                f"Role: {role}\n"
+                f"Email: {email}\n"
+                f"Phone: {phone}\n"
+                f"Student Count: {student_count}\n"
+                f"Message: {message}\n"
+            )
+            send_mail(
+                subject,
+                body,
+                getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@arewanetventures.com"),
+                ["infor@arewanetventures.com"],
+                fail_silently=True,
+            )
+        except Exception:
+            pass
+
+        messages.success(
+            request,
+            f"Thank you {name}! Your demo request for {school_name} has been received. "
+            "Our ArewaNet team will get in touch with you shortly on WhatsApp or Email."
+        )
+        return redirect("/#contact")
+
+    return redirect("/#contact")
+
 
 
 def forgot_password(request):
@@ -1004,7 +1009,7 @@ def logout_view(request):
     they belong to based on their account type.
     """
     user = request.user
-    target_url = "portals"
+    target_url = "home"
 
     # Identify the user's role before clearing the session to determine the redirect
     if user.is_superuser:

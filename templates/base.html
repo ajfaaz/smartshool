@@ -74,7 +74,7 @@
         <div class="container-fluid">
             <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="{% url home_dashboard_url_name %}">
                 {% if active_school and active_school.logo %}
-                <img src="{{ active_school.logo.url }}" alt="{{ active_school.name }} logo" class="brand-logo">
+                <img src="{{ active_school.logo.url }}" alt="{{ active_school.name }} logo" class="brand-logo" onerror="this.onerror=null; this.src='{% static 'core/img/brand-logo.png' %}';">
                 {% else %}
                 <img src="{% static 'core/img/brand-logo.png' %}" alt="SmartSchool logo" class="brand-logo">
                 {% endif %}

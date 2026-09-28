@@ -30,6 +30,7 @@ path('platform/school-admins/create/', views.create_school_admin, name='create_s
 path('platform/subscriptions/create/', views.create_subscription, name='create_subscription'),
 path('settings/principals/create/', views.create_principal, name='create_principal'),
 path('settings/exam-officers/create/', views.create_exam_officer, name='create_exam_officer'),
+path('request-demo/', views.request_demo, name='request_demo'),
 path('schools/switch/', views.switch_school, name='switch_school'),
 
 ]

@@ -4,285 +4,910 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SmartSchool | Modern School ERP</title>
+    <title>SmartSchool™ | Modern School ERP & Digital Solution</title>
+    <meta name="description" content="The complete digital solution for modern schools and educational institutions. Manage operations, grades, fees, attendance and parent communication in one platform. Powered by ArewaNet Ventures.">
+    
+    <!-- Google Fonts & Bootstrap Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <style>
         :root {
-            --blue-900: #0f172a;
-            --blue-700: #1e40af;
-            --blue-600: #2563eb;
-            --blue-400: #60a5fa;
-            --bg-soft: #f8fafc;
-            --text-main: #172554;
+            --emerald-600: #00A859;
+            --emerald-700: #008746;
+            --emerald-50: #E6F7EF;
+            --emerald-100: #C2EED9;
+            --navy-900: #0B2545;
+            --navy-950: #061527;
+            --navy-800: #133863;
+            --navy-700: #1D4ED8;
+            --gold-500: #F5A623;
+            --gold-400: #FFC107;
+            --bg-neutral: #F4F7F6;
+            --card-border: rgba(11, 37, 69, 0.08);
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background: var(--bg-soft);
-            color: var(--text-main);
+            font-family: var(--font-body);
+            background-color: var(--bg-neutral);
+            color: #1E293B;
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        .navbar-shell {
-            background: #fff;
-            border-bottom: 1px solid #dbeafe;
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: var(--font-heading);
+            letter-spacing: -0.02em;
         }
 
-        .brand-logo {
-            height: 48px;
+        /* Navbar Styling */
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 168, 89, 0.12);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(11, 37, 69, 0.04);
+        }
+
+        .brand-logo-nav {
+            height: 46px;
             width: auto;
-            max-width: 280px;
+            max-width: 260px;
             object-fit: contain;
-            border: 0;
-            border-radius: 0;
-            background: transparent;
         }
 
-        .brand-fallback {
-            width: 40px;
-            height: 40px;
-            border-radius: 0.7rem;
+        .brand-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--navy-900);
+            background: var(--emerald-50);
+            border: 1px solid var(--emerald-100);
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e40af, #2563eb);
+            gap: 0.3rem;
         }
 
-        .hero {
-            background: linear-gradient(90deg, var(--blue-900), var(--blue-700));
-            color: #fff;
-            border-radius: 1.5rem;
-            padding: 3.5rem 2rem;
-            margin-top: 1.5rem;
-        }
-
-        .hero h1 {
-            font-weight: 800;
-            line-height: 1.2;
-        }
-
-        .hero-preview {
-            border-radius: 1rem;
-            background: #fff;
-            color: #0f172a;
-            padding: 1rem;
-            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
-        }
-
-        .stat-chip {
-            background: #dbeafe;
-            color: #1e3a8a;
-            border-radius: 999px;
+        .nav-link {
             font-weight: 600;
-            padding: 0.45rem 0.9rem;
-            display: inline-block;
-            margin: 0.2rem;
+            color: var(--navy-900);
+            padding: 0.5rem 1rem !important;
+            transition: color 0.2s ease;
         }
 
-        .feature-card,
-        .review-card,
-        .cta-card {
-            border: 0;
-            border-radius: 1rem;
-            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+        .nav-link:hover {
+            color: var(--emerald-600);
         }
 
-        .feature-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
+        .btn-emerald {
+            background-color: var(--emerald-600);
+            color: #ffffff;
             font-weight: 700;
-            background: #dbeafe;
-            color: #1d4ed8;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 14px rgba(0, 168, 89, 0.35);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .trusted {
-            background: #eff6ff;
+        .btn-emerald:hover {
+            background-color: var(--emerald-700);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 168, 89, 0.45);
+        }
+
+        .btn-navy-outline {
+            background-color: transparent;
+            color: var(--navy-900);
+            border: 2px solid var(--navy-900);
+            font-weight: 700;
+            padding: 0.6rem 1.3rem;
+            border-radius: 0.75rem;
+            transition: all 0.25s ease;
+        }
+
+        .btn-navy-outline:hover {
+            background-color: var(--navy-900);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            padding: 3rem 0 4rem;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F4F7F6 100%);
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 168, 89, 0.08);
+            border: 1px solid rgba(0, 168, 89, 0.2);
+            color: var(--emerald-700);
+            padding: 0.35rem 1rem;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            font-weight: 800;
+            color: var(--navy-900);
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-title span.highlight-emerald {
+            color: var(--emerald-600);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: #475569;
+            max-width: 640px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        /* Hero Image Showcase Card */
+        .hero-banner-container {
+            position: relative;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(11, 37, 69, 0.25), 0 0 0 1px rgba(0, 168, 89, 0.15);
+            background: #ffffff;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+
+        .hero-banner-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 60px -12px rgba(11, 37, 69, 0.32), 0 0 0 2px var(--emerald-600);
+        }
+
+        .hero-banner-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Feature Pills Strip */
+        .feature-pills-section {
+            margin-top: -2.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .feature-pill-card {
+            background: #ffffff;
             border-radius: 1rem;
-            padding: 1rem;
+            padding: 1.25rem;
+            border: 1px solid rgba(11, 37, 69, 0.08);
+            box-shadow: 0 10px 25px rgba(11, 37, 69, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.25s ease;
+            height: 100%;
         }
 
-        .footer-shell {
-            background: var(--blue-900);
-            color: #bfdbfe;
+        .feature-pill-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--emerald-600);
+            box-shadow: 0 15px 30px rgba(0, 168, 89, 0.15);
         }
 
-        @media (max-width: 991px) {
-            .hero {
-                padding: 2rem 1.2rem;
-            }
+        .pill-icon-wrapper {
+            width: 52px;
+            height: 52px;
+            border-radius: 0.85rem;
+            background: var(--emerald-50);
+            color: var(--emerald-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+
+        .feature-pill-card:hover .pill-icon-wrapper {
+            background: var(--emerald-600);
+            color: #ffffff;
+        }
+
+        .pill-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--navy-900);
+            margin-bottom: 0.2rem;
+        }
+
+        .pill-desc {
+            font-size: 0.825rem;
+            color: #64748B;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* Portals Switcher Section */
+        .portals-section {
+            padding: 5rem 0;
+            background: #ffffff;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3.5rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: var(--emerald-600);
+            background: var(--emerald-50);
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--navy-900);
+        }
+
+        .portal-role-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 1rem;
+            padding: 1.75rem;
+            text-align: center;
+            transition: all 0.25s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .portal-role-card:hover {
+            background: #ffffff;
+            border-color: var(--emerald-600);
+            box-shadow: 0 16px 32px rgba(11, 37, 69, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .portal-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin: 0 auto 1.25rem;
+            color: var(--navy-900);
+            transition: all 0.25s ease;
+        }
+
+        .portal-role-card:hover .portal-avatar {
+            background: var(--navy-900);
+            color: var(--emerald-600);
+        }
+
+        /* Core Capabilities Grid */
+        .capabilities-section {
+            padding: 5rem 0;
+            background: var(--navy-950);
+            color: #ffffff;
+            position: relative;
+        }
+
+        .capability-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .capability-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--emerald-600);
+            transform: translateY(-5px);
+        }
+
+        .capability-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--emerald-600);
+            opacity: 0.8;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Banner Tagline Strip */
+        .tagline-banner {
+            background: linear-gradient(90deg, var(--navy-900) 0%, var(--emerald-700) 100%);
+            color: #ffffff;
+            padding: 2.5rem 0;
+            border-radius: 1.25rem;
+            box-shadow: 0 20px 40px rgba(11, 37, 69, 0.2);
+        }
+
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Footer */
+        .footer-main {
+            background: #040E1B;
+            color: #94A3B8;
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .footer-brand-title {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .footer-link {
+            color: #94A3B8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--emerald-600);
         }
     </style>
 </head>
 <body>
-    <header class="navbar navbar-expand-lg navbar-shell sticky-top">
+
+    <!-- Django Messages Alert Bar -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Header Navigation -->
+    <header class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
                 {% if active_school and active_school.logo %}
-                <img src="{{ active_school.logo.url }}" alt="{{ active_school.name }} logo" class="brand-logo">
+                <img src="{{ active_school.logo.url }}" alt="{{ active_school.name }} logo" class="brand-logo-nav" onerror="this.onerror=null; this.src='{% static 'core/img/brand-logo.png' %}';">
                 {% else %}
-                <img src="{% static 'core/img/brand-logo.png' %}" alt="SmartSchool logo" class="brand-logo">
+                <img src="{% static 'core/img/brand-logo.png' %}" alt="SmartSchool Logo" class="brand-logo-nav">
                 {% endif %}
+                <span class="brand-badge d-none d-sm-inline-flex">
+                    <i class="bi bi-patch-check-fill text-emerald-600"></i> ArewaNet Verified
+                </span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav">
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#siteNavbar" aria-controls="siteNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="siteNav">
+
+            <div class="collapse navbar-collapse" id="siteNavbar">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#solutions">Solutions</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#demo">Demo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#modules">Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portals">Portals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#benefits">Why SmartSchool</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact & Demo</a></li>
                 </ul>
-                <div class="d-flex gap-2">
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
                     {% if user.is_authenticated %}
-                    <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-emerald">
+                        <i class="bi bi-grid-fill me-1"></i> Dashboard
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-navy-outline">Logout</a>
                     {% else %}
-                    <a href="{% url 'portals' %}" class="btn btn-outline-primary">Login</a>
-                    <a href="{% url 'platform_login' %}" class="btn btn-primary">Request Demo</a>
+                    <a href="#portals" class="btn btn-navy-outline">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Portals Login
+                    </a>
+                    <button type="button" class="btn btn-emerald" data-bs-toggle="modal" data-bs-target="#demoModal">
+                        <i class="bi bi-calendar-event-fill me-1"></i> Request Demo
+                    </button>
                     {% endif %}
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="container py-4 py-lg-5">
-        <section class="hero" id="demo">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-7">
-                    <h1>Transform Your Institution<br>with SmartSchool</h1>
-                    <p class="lead text-white-50 mt-3 mb-4">The all-in-one school management system for modern schools.</p>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a href="{% url 'portals' %}" class="btn btn-primary btn-lg">Get Started Free</a>
-                        <a href="{% url 'platform_login' %}" class="btn btn-light btn-lg text-primary">Watch Demo</a>
+    <!-- Hero Section -->
+    <section class="hero-section" id="overview">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="hero-eyebrow">
+                        <i class="bi bi-stars"></i> SmartSchool™ Digital ERP Platform
+                    </div>
+                    <h1 class="hero-title">
+                        The Complete Digital Solution for <span class="highlight-emerald">Modern Schools</span> and Institutions
+                    </h1>
+                    <p class="hero-subtitle">
+                        SmartSchool helps schools and learning centers manage operations, improve communication, and create better learning experiences — all in one unified platform.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <a href="#portals" class="btn btn-emerald btn-lg px-4 py-3">
+                            <i class="bi bi-shield-lock-fill me-2"></i> Access School Portals
+                        </a>
+                        <button type="button" class="btn btn-navy-outline btn-lg px-4 py-3" data-bs-toggle="modal" data-bs-target="#demoModal">
+                            <i class="bi bi-play-circle-fill me-2"></i> Request Demo
+                        </button>
+                    </div>
+                    <div class="d-flex align-items-center gap-4 text-muted small pt-2 fw-semibold">
+                        <span><i class="bi bi-check-circle-fill text-success me-1"></i> Real-time Gradebooks</span>
+                        <span><i class="bi bi-check-circle-fill text-success me-1"></i> Automated Report Cards</span>
+                        <span><i class="bi bi-check-circle-fill text-success me-1"></i> Parent SMS Alerts</span>
                     </div>
                 </div>
+
+                <div class="col-lg-6">
+                    <!-- Hero Showcase Image Card -->
+                    <div class="hero-banner-container">
+                        <img src="{% static 'core/img/smartschool-hero-banner.jpg' %}" 
+                             alt="SmartSchool - The Complete Digital Solution for Modern Schools" 
+                             class="hero-banner-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Pills Strip (Key Core Pillars directly from Banner) -->
+    <section class="feature-pills-section mb-5" id="modules">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-pill-card">
+                        <div class="pill-icon-wrapper">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div>
+                            <h3 class="pill-title">Student Management</h3>
+                            <p class="pill-desc">Full student profiles, digital enrollment, identity verification and smart ID cards.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-pill-card">
+                        <div class="pill-icon-wrapper">
+                            <i class="bi bi-calendar3-event-fill"></i>
+                        </div>
+                        <div>
+                            <h3 class="pill-title">Class & Timetable</h3>
+                            <p class="pill-desc">Class allocations, subject assignments, daily teacher schedules & attendance.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-pill-card">
+                        <div class="pill-icon-wrapper">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="pill-title">Exams & Grades</h3>
+                            <p class="pill-desc">Continuous Assessment (CA) tracking, automated termly grading & PDF report cards.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-pill-card">
+                        <div class="pill-icon-wrapper">
+                            <i class="bi bi-person-badge-fill"></i>
+                        </div>
+                        <div>
+                            <h3 class="pill-title">Teachers Management</h3>
+                            <p class="pill-desc">Dedicated teacher workspace for assignment posting, grade uploads & attendance.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-pill-card">
+                        <div class="pill-icon-wrapper">
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </div>
+                        <div>
+                            <h3 class="pill-title">Parent Communication</h3>
+                            <p class="pill-desc">Instant SMS notifications, parent portal logins and real-time academic alerts.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-pill-card">
+                        <div class="pill-icon-wrapper">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <div>
+                            <h3 class="pill-title">Reports & Analytics</h3>
+                            <p class="pill-desc">Audit-ready fee collection history, attendance rates and academic performance trends.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Unified Portals Quick-Access Grid -->
+    <section class="portals-section" id="portals">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Role-Based Access</span>
+                <h2 class="section-title">Dedicated Portals for Every Stakeholder</h2>
+                <p class="text-muted mt-2">Choose your designated portal to access specialized tools and workflows tailored to your role.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4 col-lg-2-4">
+                    <div class="portal-role-card">
+                        <div>
+                            <div class="portal-avatar">
+                                <i class="bi bi-building-gear"></i>
+                            </div>
+                            <h4 class="h6 font-weight-bold mb-1">School Admin</h4>
+                            <p class="small text-muted mb-3">Institutional control, subscriptions & setup.</p>
+                        </div>
+                        <a href="{% url 'school_admin_login' %}" class="btn btn-sm btn-navy-outline w-100">Admin Login</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-2-4">
+                    <div class="portal-role-card">
+                        <div>
+                            <div class="portal-avatar">
+                                <i class="bi bi-person-fill-gear"></i>
+                            </div>
+                            <h4 class="h6 font-weight-bold mb-1">Principal</h4>
+                            <p class="small text-muted mb-3">Executive review, result approvals & oversight.</p>
+                        </div>
+                        <a href="{% url 'principal_login' %}" class="btn btn-sm btn-navy-outline w-100">Principal Login</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-2-4">
+                    <div class="portal-role-card">
+                        <div>
+                            <div class="portal-avatar">
+                                <i class="bi bi-award-fill"></i>
+                            </div>
+                            <h4 class="h6 font-weight-bold mb-1">Exam Officer</h4>
+                            <p class="small text-muted mb-3">Bulk grade uploads, broadsheet & reports.</p>
+                        </div>
+                        <a href="{% url 'exam_officer_login' %}" class="btn btn-sm btn-navy-outline w-100">Exam Portal</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-2-4">
+                    <div class="portal-role-card">
+                        <div>
+                            <div class="portal-avatar">
+                                <i class="bi bi-easel-fill"></i>
+                            </div>
+                            <h4 class="h6 font-weight-bold mb-1">Teacher</h4>
+                            <p class="small text-muted mb-3">CA entry, classroom attendance & assignments.</p>
+                        </div>
+                        <a href="{% url 'teacher_login' %}" class="btn btn-sm btn-navy-outline w-100">Teacher Login</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-2-4">
+                    <div class="portal-role-card">
+                        <div>
+                            <div class="portal-avatar">
+                                <i class="bi bi-mortarboard-fill"></i>
+                            </div>
+                            <h4 class="h6 font-weight-bold mb-1">Student & Parent</h4>
+                            <p class="small text-muted mb-3">Check terminal results, fee status & ID cards.</p>
+                        </div>
+                        <a href="{% url 'student_login' %}" class="btn btn-sm btn-emerald w-100">Student/Parent</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Platform Capabilities -->
+    <section class="capabilities-section" id="benefits">
+        <div class="container">
+            <div class="section-header text-white">
+                <span class="section-badge text-white bg-success">Platform Power</span>
+                <h2 class="section-title text-white">Why Leading Institutions Choose SmartSchool</h2>
+                <p class="text-white-50 mt-2">Built specifically for primary, secondary, and tertiary institutions needing reliability and speed.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="capability-card">
+                        <div class="capability-number">01</div>
+                        <h3 class="h5 font-weight-bold mb-2">Automated PDF Report Cards</h3>
+                        <p class="text-white-50 mb-0">Generate polished, error-free term report cards with position rankings, grade remarks, and principal signatures in seconds.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="capability-card">
+                        <div class="capability-number">02</div>
+                        <h3 class="h5 font-weight-bold mb-2">Financial Accounting & Audit</h3>
+                        <p class="text-white-50 mb-0">Track tuition fees, partial payments, outstanding balances, and generate instant receipt records with complete transparency.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="capability-card">
+                        <div class="capability-number">03</div>
+                        <h3 class="h5 font-weight-bold mb-2">Instant Parent SMS Dispatch</h3>
+                        <p class="text-white-50 mb-0">Notify parents directly on their mobile phones when term results are published or urgent school updates occur.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tagline Banner Strip -->
+            <div class="mt-5">
+                <div class="tagline-banner text-center p-4 p-md-5">
+                    <h3 class="h2 font-weight-bold mb-2">Smarter Schools. Stronger Communities.</h3>
+                    <p class="lead mb-4 text-white-50">Join hundreds of progressive educational institutions elevating their academic management today.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="button" class="btn btn-emerald btn-lg px-4" data-bs-toggle="modal" data-bs-target="#demoModal">
+                            <i class="bi bi-calendar-check me-2"></i> Request Demo Free
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us & Demo Request Section -->
+    <section class="py-5 bg-white" id="contact">
+        <div class="container py-4">
+            <div class="row g-5 align-items-center">
                 <div class="col-lg-5">
-                    <div class="hero-preview">
-                        <h5 class="mb-3">Dashboard Preview</h5>
-                        <span class="stat-chip">Attendance 96%</span>
-                        <span class="stat-chip">Fees NGN 2.4M</span>
-                        <span class="stat-chip">Results +12%</span>
-                        <span class="stat-chip">Enrollment 1,240</span>
+                    <span class="section-badge">Contact Us</span>
+                    <h2 class="section-title mb-3">Request a Demo or Speak with Sales</h2>
+                    <p class="text-muted mb-4">
+                        Have questions about implementing SmartSchool for your institution? Get in touch directly via WhatsApp, email, or send us a request form below.
+                    </p>
+
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <a href="https://wa.me/2349017862785?text=Hello%20SmartSchool%20Team%2C%20I%20would%20like%20to%20request%20a%20demo%20for%20my%20school." 
+                           target="_blank" 
+                           class="d-flex align-items-center gap-3 p-3 rounded-3 text-decoration-none bg-success-subtle text-success border border-success-subtle hover-lift">
+                            <div class="fs-2 text-success"><i class="bi bi-whatsapp"></i></div>
+                            <div>
+                                <div class="fw-bold fs-6">Chat on WhatsApp</div>
+                                <div class="small opacity-75">09017862785 (+234 901 786 2785)</div>
+                            </div>
+                        </a>
+
+                        <a href="mailto:infor@arewanetventures.com?subject=SmartSchool%20Demo%20Request" 
+                           class="d-flex align-items-center gap-3 p-3 rounded-3 text-decoration-none bg-primary-subtle text-primary border border-primary-subtle hover-lift">
+                            <div class="fs-2 text-primary"><i class="bi bi-envelope-at-fill"></i></div>
+                            <div>
+                                <div class="fw-bold fs-6">Email Support & Sales</div>
+                                <div class="small opacity-75">infor@arewanetventures.com</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5">
+                        <h3 class="h4 font-weight-bold mb-1 text-navy-900">Request a Live Platform Demo</h3>
+                        <p class="text-muted small mb-4">Fill out the form below and an ArewaNet representative will get back to you promptly.</p>
+
+                        <form action="{% url 'request_demo' %}" method="post">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small text-dark">Your Name *</label>
+                                    <input type="text" name="name" class="form-control form-control-lg fs-6" placeholder="e.g. Alh. Aminu Bello" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small text-dark">School Name *</label>
+                                    <input type="text" name="school_name" class="form-control form-control-lg fs-6" placeholder="e.g. Crest Group of Schools" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small text-dark">Email Address *</label>
+                                    <input type="email" name="email" class="form-control form-control-lg fs-6" placeholder="infor@arewanetventures.com" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small text-dark">Phone / WhatsApp *</label>
+                                    <input type="tel" name="phone" class="form-control form-control-lg fs-6" placeholder="09017862785" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small text-dark">Your Role</label>
+                                    <select name="role" class="form-select form-select-lg fs-6">
+                                        <option value="Proprietor / Director">Proprietor / Director</option>
+                                        <option value="Principal / Headteacher">Principal / Headteacher</option>
+                                        <option value="Bursar / Account Officer">Bursar / Account Officer</option>
+                                        <option value="IT Administrator">IT Administrator</option>
+                                        <option value="Teacher">Teacher</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small text-dark">Estimated Students</label>
+                                    <select name="student_count" class="form-select form-select-lg fs-6">
+                                        <option value="1-100 Students">1 - 100 Students</option>
+                                        <option value="100-500 Students" selected>100 - 500 Students</option>
+                                        <option value="500-1000 Students">500 - 1,000 Students</option>
+                                        <option value="1000+ Students">1,000+ Students</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold small text-dark">Additional Message / Requirements</label>
+                                    <textarea name="message" class="form-control" rows="3" placeholder="Tell us about your institution's specific requirements..."></textarea>
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-emerald btn-lg w-100 py-3 font-weight-bold">
+                                        <i class="bi bi-send-fill me-2"></i> Submit Demo Request
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="py-5">
-            <div class="trusted text-center" id="solutions">
-                <h2 class="h4 mb-3">Trusted by forward-thinking schools</h2>
-                <p class="mb-0 text-secondary">Private schools, colleges, tutorial centres, and multi-campus institutions across Nigeria.</p>
-            </div>
-        </section>
-
-        <section class="pb-5" id="features">
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card card h-100">
-                        <div class="card-body">
-                            <div class="feature-icon mb-3">01</div>
-                            <h3 class="h5">Attendance Intelligence</h3>
-                            <p class="text-secondary mb-0">Real-time class attendance, trend charts, and school-wide daily rates.</p>
-                        </div>
+    <!-- Request Demo Interactive Modal -->
+    <div class="modal fade" id="demoModal" tabindex="-1" aria-labelledby="demoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header border-0 bg-navy-900 text-white p-4 rounded-top-4" style="background-color: var(--navy-900);">
+                    <div>
+                        <h4 class="modal-title font-weight-bold text-white mb-1" id="demoModalLabel">
+                            <i class="bi bi-calendar-event-fill text-success me-2"></i> Request a SmartSchool Demo
+                        </h4>
+                        <p class="text-white-50 small mb-0">Connect with our ArewaNet team for a walkthrough.</p>
                     </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card card h-100">
-                        <div class="card-body">
-                            <div class="feature-icon mb-3">02</div>
-                            <h3 class="h5">Results and Report Cards</h3>
-                            <p class="text-secondary mb-0">Upload CA/exam scores, track performance, and publish term reports.</p>
+                <div class="modal-body p-4 p-md-5">
+                    <form action="{% url 'request_demo' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-dark">Full Name *</label>
+                                <input type="text" name="name" class="form-control form-control-lg fs-6" placeholder="Full Name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-dark">School / College Name *</label>
+                                <input type="text" name="school_name" class="form-control form-control-lg fs-6" placeholder="School Name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-dark">Email Address *</label>
+                                <input type="email" name="email" class="form-control form-control-lg fs-6" placeholder="infor@arewanetventures.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-dark">Phone / WhatsApp Number *</label>
+                                <input type="tel" name="phone" class="form-control form-control-lg fs-6" placeholder="09017862785" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-dark">Your Role</label>
+                                <select name="role" class="form-select form-select-lg fs-6">
+                                    <option value="Proprietor / Director">Proprietor / Director</option>
+                                    <option value="Principal / Headteacher">Principal / Headteacher</option>
+                                    <option value="Bursar / Account Officer">Bursar / Account Officer</option>
+                                    <option value="IT Administrator">IT Administrator</option>
+                                    <option value="Teacher">Teacher</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-dark">Student Population</label>
+                                <select name="student_count" class="form-select form-select-lg fs-6">
+                                    <option value="1-100 Students">1 - 100 Students</option>
+                                    <option value="100-500 Students" selected>100 - 500 Students</option>
+                                    <option value="500-1000 Students">500 - 1,000 Students</option>
+                                    <option value="1000+ Students">1,000+ Students</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold small text-dark">Message / Demo Notes</label>
+                                <textarea name="message" class="form-control" rows="3" placeholder="Tell us how we can help your school..."></textarea>
+                            </div>
+                            <div class="col-12 mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <a href="https://wa.me/2349017862785?text=Hello%20SmartSchool%20Team%2C%20I%20would%20like%20to%20request%20a%20demo%20for%20my%20school." 
+                                   target="_blank" 
+                                   class="btn btn-outline-success font-weight-bold">
+                                    <i class="bi bi-whatsapp me-1"></i> Quick WhatsApp
+                                </a>
+                                <button type="submit" class="btn btn-emerald btn-lg px-4 font-weight-bold">
+                                    <i class="bi bi-send-fill me-2"></i> Submit Request
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card card h-100">
-                        <div class="card-body">
-                            <div class="feature-icon mb-3">03</div>
-                            <h3 class="h5">Finance Control</h3>
-                            <p class="text-secondary mb-0">Fee setup, payment records, outstanding balances, and audit-ready history.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card card h-100">
-                        <div class="card-body">
-                            <div class="feature-icon mb-3">04</div>
-                            <h3 class="h5">Teacher Workspace</h3>
-                            <p class="text-secondary mb-0">Assignments, result entry, attendance, and classroom performance insights.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="feature-card card h-100">
-                        <div class="card-body">
-                            <div class="feature-icon mb-3">05</div>
-                            <h3 class="h5">Parent Notifications</h3>
-                            <p class="text-secondary mb-0">Automatic SMS alerts when student results are published.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4" id="pricing">
-                    <div class="feature-card card h-100">
-                        <div class="card-body">
-                            <div class="feature-icon mb-3">06</div>
-                            <h3 class="h5">Platform Administration</h3>
-                            <p class="text-secondary mb-0">Manage schools, subscriptions, and roles from one control center.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="pb-5" id="testimonials">
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="review-card card h-100">
-                        <div class="card-body">
-                            <p class="mb-2">"Admissions and fee tracking became effortless within one term."</p>
-                            <small class="text-secondary">Bursar, Sunrise College</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="review-card card h-100">
-                        <div class="card-body">
-                            <p class="mb-2">"Teachers now upload scores in minutes and parents get instant updates."</p>
-                            <small class="text-secondary">Principal, Greenfield Academy</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="review-card card h-100">
-                        <div class="card-body">
-                            <p class="mb-2">"SmartSchool gave us visibility across campuses and terms."</p>
-                            <small class="text-secondary">Director, Crest Group of Schools</small>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <section class="pb-4">
-            <div class="cta-card card text-center p-4 p-md-5">
-                <h2 class="h3 mb-2">Ready to digitize your school operations?</h2>
-                <p class="text-secondary mb-4">Book a demo and get your institution onboarded quickly.</p>
-                <div class="d-flex justify-content-center gap-2 flex-wrap">
-                    <a href="{% url 'portals' %}" class="btn btn-primary btn-lg">Open Portals</a>
-                    <a href="{% url 'platform_login' %}" class="btn btn-outline-primary btn-lg">Talk to Sales</a>
+    <!-- Footer -->
+    <footer class="footer-main">
+        <div class="container">
+            <div class="row g-4 pb-4">
+                <div class="col-lg-5">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="footer-brand-title">SmartSchool™</span>
+                    </div>
+                    <p class="text-muted small pe-lg-4">
+                        SmartSchool helps schools and learning centers manage operations, improve communication, and create better learning experiences — all in one unified digital platform.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 mt-3">
+                        <span class="badge bg-secondary">Powered by ArewaNet Ventures</span>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <h5 class="text-white h6 font-weight-bold mb-3">Quick Navigation</h5>
+                    <ul class="list-unstyled mb-0 d-flex flex-column gap-2 small">
+                        <li><a href="#portals" class="footer-link">Portals Hub</a></li>
+                        <li><a href="#contact" class="footer-link">Request Demo</a></li>
+                        <li><a href="{% url 'school_admin_login' %}" class="footer-link">School Admin Portal</a></li>
+                        <li><a href="{% url 'principal_login' %}" class="footer-link">Principal Portal</a></li>
+                        <li><a href="{% url 'teacher_login' %}" class="footer-link">Teacher Workspace</a></li>
+                        <li><a href="{% url 'student_login' %}" class="footer-link">Student & Parent Portal</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                    <h5 class="text-white h6 font-weight-bold mb-3">Contact Information</h5>
+                    <ul class="list-unstyled mb-0 d-flex flex-column gap-2 small">
+                        <li>
+                            <i class="bi bi-envelope-fill text-success me-2"></i> 
+                            <a href="mailto:infor@arewanetventures.com" class="footer-link">infor@arewanetventures.com</a>
+                        </li>
+                        <li>
+                            <i class="bi bi-whatsapp text-success me-2"></i> 
+                            <a href="https://wa.me/2349017862785" target="_blank" class="footer-link">09017862785 (+234 901 786 2785)</a>
+                        </li>
+                        <li>
+                            <i class="bi bi-shield-check text-success me-2"></i> 
+                            <span>ArewaNet Ventures Educational Technology</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <footer class="footer-shell py-4">
-        <div class="container d-flex justify-content-between flex-wrap gap-2">
-            <span>SmartSchool School ERP</span>
-            <span>Attendance • Results • Finance • Portals</span>
+            <div class="pt-4 border-top border-secondary border-opacity-25 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 small text-muted">
+                <div>&copy; 2026 SmartSchool™. All rights reserved.</div>
+                <div>Powered by <strong>ArewaNet Ventures</strong></div>
+            </div>
         </div>
     </footer>
 
