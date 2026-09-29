@@ -42,7 +42,7 @@ SECRET_KEY = os.getenv(
     'replace-this-with-a-unique-secret-key-6e9f2b2940f44cb7b4a1baf3a44a7f55',
 )
 DEBUG = _env_flag('DEBUG', True)
-ALLOWED_HOSTS = _env_list('ALLOWED_HOSTS', 'localhost,127.0.0.1,smartschool.arewanetventures.com,.arewanetventures.com,*')
+ALLOWED_HOSTS = _env_list('ALLOWED_HOSTS', 'smartschool.arewanetventures.com,.arewanetventures.com,localhost,127.0.0.1')
 CSRF_TRUSTED_ORIGINS = _env_list('CSRF_TRUSTED_ORIGINS', 'https://smartschool.arewanetventures.com,https://*.arewanetventures.com')
 
 
@@ -213,9 +213,11 @@ PARENT_NOTIFICATION_CHANNEL = os.getenv('PARENT_NOTIFICATION_CHANNEL', 'whatsapp
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = 'same-origin'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-if _env_flag('ENABLE_DEPLOYMENT_SECURITY', False):
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+IS_PRODUCTION = _env_flag('ENABLE_DEPLOYMENT_SECURITY', not DEBUG)
+
+if IS_PRODUCTION:
     SECURE_HSTS_SECONDS = _env_int('SECURE_HSTS_SECONDS', 31536000)
     SECURE_HSTS_INCLUDE_SUBDOMAINS = _env_flag('SECURE_HSTS_INCLUDE_SUBDOMAINS', True)
     SECURE_HSTS_PRELOAD = _env_flag('SECURE_HSTS_PRELOAD', True)
