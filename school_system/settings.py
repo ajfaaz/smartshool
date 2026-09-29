@@ -42,8 +42,8 @@ SECRET_KEY = os.getenv(
     'replace-this-with-a-unique-secret-key-6e9f2b2940f44cb7b4a1baf3a44a7f55',
 )
 DEBUG = _env_flag('DEBUG', True)
-ALLOWED_HOSTS = _env_list('ALLOWED_HOSTS', 'localhost,127.0.0.1')
-CSRF_TRUSTED_ORIGINS = _env_list('CSRF_TRUSTED_ORIGINS', '')
+ALLOWED_HOSTS = _env_list('ALLOWED_HOSTS', 'localhost,127.0.0.1,smartschool.arewanetventures.com,.arewanetventures.com,*')
+CSRF_TRUSTED_ORIGINS = _env_list('CSRF_TRUSTED_ORIGINS', 'https://smartschool.arewanetventures.com,https://*.arewanetventures.com')
 
 
 # Application definition
