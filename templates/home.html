@@ -408,11 +408,7 @@
     <header class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
-                {% if active_school and active_school.logo %}
-                <img src="{{ active_school.logo.url }}" alt="{{ active_school.name }} logo" class="brand-logo-nav" onerror="this.onerror=null; this.src='{% static 'core/img/brand-logo.png' %}';">
-                {% else %}
                 <img src="{% static 'core/img/brand-logo.png' %}" alt="SmartSchool Logo" class="brand-logo-nav">
-                {% endif %}
                 <span class="brand-badge d-none d-sm-inline-flex">
                     <i class="bi bi-patch-check-fill text-emerald-600"></i> ArewaNet Verified
                 </span>
